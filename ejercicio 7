@@ -1,0 +1,53 @@
+public class WarshallAlgorithm {
+
+    public static void warshall(int[][] graph, int n) {
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (graph[i][k] == 1 && graph[k][j] == 1) {
+                        graph[i][j] = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean isStronglyConnected(int[][] graph, int n) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                // Si no hay camino de i a j, el grafo no es fuertemente conexo
+                if (graph[i][j] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int n = 4;
+
+        int[][] graph = {
+            {0, 1, 0, 0}, // 0 → 1
+            {0, 0, 1, 0}, // 1 → 2
+            {1, 0, 0, 1}, // 2 → 0, 2 → 3
+            {0, 0, 0, 0}  // 3 no tiene aristas salientes
+        };
+
+        warshall(graph, n);
+
+        System.out.println("Matriz de alcanzabilidad:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(graph[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        if (isStronglyConnected(graph, n)) {
+            System.out.println("El grafo es fuertemente conexo.");
+        } else {
+            System.out.println("El grafo no es fuertemente conexo.");
+        }
+    }
+}
