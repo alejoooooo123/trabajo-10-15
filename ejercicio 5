@@ -16,6 +16,7 @@ class DijkstraAlgorithm {
 
         for (int i = 0; i < n - 1; i++) {
             int u = minDistance(distances, visited);
+            if (u == -1) break; // No hay más nodos accesibles
             visited[u] = true;
 
             for (int v = 0; v < n; v++) {
@@ -35,7 +36,7 @@ class DijkstraAlgorithm {
         int minIndex = -1;
 
         for (int i = 0; i < distances.length; i++) {
-            if (!visited[i] && distances[i] <= min) {
+            if (!visited[i] && distances[i] < min) {  // Cambiado a < para mejor precisión
                 min = distances[i];
                 minIndex = i;
             }
@@ -48,11 +49,11 @@ class DijkstraAlgorithm {
         System.out.println("Vertex\tDistance\tPath");
 
         for (int i = 0; i < distances.length; i++) {
-            System.out.print(i + "\t" + distances[i] + "\t\t");
-
+            System.out.print(i + "\t");
             if (distances[i] == INF) {
-                System.out.println("No path");
+                System.out.println("INF\t\tNo path");
             } else {
+                System.out.print(distances[i] + "\t\t");
                 printPath(previous, i);
                 System.out.println();
             }
@@ -63,7 +64,6 @@ class DijkstraAlgorithm {
         if (v == -1) {
             return;
         }
-
         printPath(previous, previous[v]);
         System.out.print(v + " ");
     }
