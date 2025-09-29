@@ -1,4 +1,3 @@
-# trabajo-10-15
 import java.util.*;
 
 class Edge implements Comparable<Edge> {
@@ -106,4 +105,12 @@ public class Main {
         graph.addEdge(0, 3, 5);
         graph.addEdge(1, 2, 2);
         graph.addEdge(1, 4, 5);
-        graph.add
+        graph.addEdge(2, 3, 2);
+        graph.addEdge(2, 4, 6);
+        graph.addEdge(3, 4, 1);
+        graph.addEdge(4, 5, 4);
+
+        System.out.println("Peso total MST con Kruskal: " + graph.kruskalMST());
+        System.out.println("Peso total MST con Prim: " + graph.primMST());
+    }
+}
