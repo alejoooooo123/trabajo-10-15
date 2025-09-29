@@ -29,7 +29,6 @@ class Graph {
         edges.add(new Edge(src, dest, weight));
     }
 
-    // Algoritmo de Kruskal
     public int kruskalMST() {
         Collections.sort(edges);
         int[] parent = new int[V];
@@ -60,7 +59,6 @@ class Graph {
         parent[xset] = yset;
     }
 
-    // Algoritmo de Prim
     public int primMST() {
         boolean[] inMST = new boolean[V];
         int[] key = new int[V];
