@@ -1,0 +1,87 @@
+import java.util.*;
+
+public class CaminoMasCortoBFS {
+    private Map<Integer, List<Integer>> grafo;
+
+    public CaminoMasCortoBFS() {
+        grafo = new HashMap<>();
+    }
+
+    public void agregarArista(int origen, int destino) {
+        grafo.putIfAbsent(origen, new ArrayList<>());
+        grafo.putIfAbsent(destino, new ArrayList<>());
+        grafo.get(origen).add(destino);
+        grafo.get(destino).add(origen);
+    }
+
+    public List<Integer> encontrarCaminoMasCorto(int origen, int destino) {
+        if (!grafo.containsKey(origen) || !grafo.containsKey(destino)) {
+            return Collections.emptyList();
+        }
+
+        Queue<Integer> cola = new LinkedList<>();
+        Map<Integer, Integer> padres = new HashMap<>();
+        Set<Integer> visitados = new HashSet<>();
+
+        cola.add(origen);
+        visitados.add(origen);
+        padres.put(origen, -1);
+
+        while (!cola.isEmpty()) {
+            int actual = cola.poll();
+
+            if (actual == destino) {
+                return reconstruirCamino(padres, destino);
+            }
+
+            for (int vecino : grafo.getOrDefault(actual, Collections.emptyList())) {
+                if (!visitados.contains(vecino)) {
+                    visitados.add(vecino);
+                    padres.put(vecino, actual);
+                    cola.add(vecino);
+                }
+            }
+        }
+
+        return Collections.emptyList();
+    }
+
+    private List<Integer> reconstruirCamino(Map<Integer, Integer> padres, int destino) {
+        List<Integer> camino = new ArrayList<>();
+        int actual = destino;
+
+        while (actual != -1) {
+            camino.add(actual);
+            actual = padres.get(actual);
+        }
+
+        Collections.reverse(camino);
+        return camino;
+    }
+
+    public static void main(String[] args) {
+        CaminoMasCortoBFS buscador = new CaminoMasCortoBFS();
+        
+        buscador.agregarArista(0, 1);
+        buscador.agregarArista(0, 2);
+        buscador.agregarArista(1, 3);
+        buscador.agregarArista(2, 3);
+        buscador.agregarArista(3, 4);
+        buscador.agregarArista(4, 5);
+
+        List<Integer> camino = buscador.encontrarCaminoMasCorto(0, 5);
+
+        if (camino.isEmpty()) {
+            System.out.println("No existe camino entre los vértices");
+        } else {
+            System.out.print("Camino más corto → ");
+            for (int i = 0; i < camino.size(); i++) {
+                System.out.print(camino.get(i));
+                if (i < camino.size() - 1) {
+                    System.out.print(" → ");
+                }
+            }
+            System.out.println();
+        }
+    }
+}
