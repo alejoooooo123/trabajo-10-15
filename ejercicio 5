@@ -1,0 +1,82 @@
+import java.util.*;
+
+class DijkstraAlgorithm {
+    private static final int INF = Integer.MAX_VALUE;
+
+    public static void dijkstra(int[][] graph, int start) {
+        int n = graph.length;
+        int[] distances = new int[n];
+        int[] previous = new int[n];
+        boolean[] visited = new boolean[n];
+
+        Arrays.fill(distances, INF);
+        Arrays.fill(previous, -1);
+
+        distances[start] = 0;
+
+        for (int i = 0; i < n - 1; i++) {
+            int u = minDistance(distances, visited);
+            visited[u] = true;
+
+            for (int v = 0; v < n; v++) {
+                if (!visited[v] && graph[u][v] != 0 && distances[u] != INF &&
+                    distances[u] + graph[u][v] < distances[v]) {
+                    distances[v] = distances[u] + graph[u][v];
+                    previous[v] = u;
+                }
+            }
+        }
+
+        printSolution(distances, previous, start);
+    }
+
+    private static int minDistance(int[] distances, boolean[] visited) {
+        int min = INF;
+        int minIndex = -1;
+
+        for (int i = 0; i < distances.length; i++) {
+            if (!visited[i] && distances[i] <= min) {
+                min = distances[i];
+                minIndex = i;
+            }
+        }
+
+        return minIndex;
+    }
+
+    private static void printSolution(int[] distances, int[] previous, int start) {
+        System.out.println("Vertex\tDistance\tPath");
+
+        for (int i = 0; i < distances.length; i++) {
+            System.out.print(i + "\t" + distances[i] + "\t\t");
+
+            if (distances[i] == INF) {
+                System.out.println("No path");
+            } else {
+                printPath(previous, i);
+                System.out.println();
+            }
+        }
+    }
+
+    private static void printPath(int[] previous, int v) {
+        if (v == -1) {
+            return;
+        }
+
+        printPath(previous, previous[v]);
+        System.out.print(v + " ");
+    }
+
+    public static void main(String[] args) {
+        int[][] graph = {
+            {0, 10, 0, 0, 3},
+            {0, 0, 2, 0, 4},
+            {0, 0, 0, 9, 0},
+            {0, 0, 7, 0, 0},
+            {0, 1, 8, 2, 0}
+        };
+
+        dijkstra(graph, 0);
+    }
+}
